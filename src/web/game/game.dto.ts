@@ -4,5 +4,5 @@ export interface PostGameDTO {
   id: UUID;
   size: number;
   grid: Array<Array<number>>;
-  status?: 'win' | 'lose' | 'ongoing';
+  status?: 'win' | 'lose' | 'ongoing' | 'draw';
 }

@@ -8,7 +8,7 @@ class GameMapper {
     return new Game(DTO.id, board);
   }
 
-  toDTO(game: Game, status?: 'win' | 'lose' | 'ongoing'): PostGameDTO {
+  toDTO(game: Game, status?: 'win' | 'lose' | 'ongoing' | 'draw'): PostGameDTO {
     return {
       id: game.id,
       size: game.board.size,

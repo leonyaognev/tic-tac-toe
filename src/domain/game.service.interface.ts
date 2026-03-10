@@ -1,3 +1,4 @@
+import { UUID } from 'crypto';
 import Game from './game/game.model';
 
 export default interface GameService {
@@ -5,4 +6,5 @@ export default interface GameService {
   validateGame(game: Game): Promise<boolean>;
   isGameOver(game: Game): number;
   newGame(): Promise<Game>;
+  getGame(id: UUID): Promise<Game>;
 }

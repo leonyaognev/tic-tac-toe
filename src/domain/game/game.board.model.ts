@@ -1,12 +1,20 @@
 import { CellType } from 'src/constants';
 
 export default class Board {
+  public grid: number[][];
+
   constructor(
     public size: number = 3,
-    public grid: Array<Array<number>> = Array.from({ length: this.size }, () =>
-      new Array<number>(this.size).fill(CellType.zeros),
-    ),
-  ) {}
+    grid?: number[][],
+  ) {
+    if (grid) {
+      this.grid = grid;
+    } else {
+      this.grid = Array.from({ length: size }, () =>
+        new Array<number>(size).fill(CellType.empty),
+      );
+    }
+  }
 
   checkWinner(): number {
     const size: number = this.grid.length;
@@ -34,16 +42,12 @@ export default class Board {
 
     lines.push(mainDiag, antiDiag);
 
-    let result: number = CellType.empty;
     for (const line of lines) {
-      result = line.every((cell) => cell === CellType.zeros)
-        ? CellType.zeros
-        : CellType.crosses;
-      result = line.every((cell) => cell === CellType.crosses)
-        ? CellType.crosses
-        : CellType.zeros;
+      if (line.every((cell) => cell === CellType.zeros)) return CellType.zeros;
+      if (line.every((cell) => cell === CellType.crosses))
+        return CellType.crosses;
     }
 
-    return result;
+    return CellType.empty;
   }
 }
