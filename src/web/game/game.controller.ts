@@ -1,12 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   NotFoundException,
   Param,
   Post,
 } from '@nestjs/common';
-import type { UUID } from 'crypto';
+import { type UUID } from 'crypto';
 import type { PostGameDTO } from './game.dto';
 import type GameService from 'src/domain/game.service.interface';
 import PostMapper from './game.mapper';
@@ -19,12 +20,15 @@ export default class GameController {
   ) {}
 
   @Post(':id')
-  tick(@Param('id') id: UUID, @Body() DTO: PostGameDTO): PostGameDTO {
+  async tick(
+    @Param('id') id: UUID,
+    @Body() DTO: PostGameDTO,
+  ): Promise<PostGameDTO> {
     let game = PostMapper.toDomain(DTO);
 
     let validate: boolean;
     try {
-      validate = this.gameService.validateGame(game);
+      validate = await this.gameService.validateGame(game);
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'NotFound') {
         throw new NotFoundException(`Game with id ${id} not found`);
@@ -40,9 +44,15 @@ export default class GameController {
         return PostMapper.toDTO(game, 'lose');
       }
 
-      game = this.gameService.calculateNextMove(game);
+      game = await this.gameService.calculateNextMove(game);
     }
 
+    return PostMapper.toDTO(game);
+  }
+
+  @Get()
+  async newGame() {
+    const game = await this.gameService.newGame();
     return PostMapper.toDTO(game);
   }
 }

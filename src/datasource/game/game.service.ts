@@ -3,13 +3,14 @@ import GameRepository from './repository';
 import { Injectable } from '@nestjs/common';
 import GameService from 'src/domain/game.service.interface';
 import GameLogic from 'src/domain/game/game.logic';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export default class GameServiceImpl implements GameService {
   constructor(private repo: GameRepository) {}
 
-  validateGame(game: Game): boolean {
-    const prev = this.repo.get(game.id);
+  async validateGame(game: Game): Promise<boolean> {
+    const prev = await this.repo.get(game.id);
     if (!prev) {
       const err = new Error('game not found');
       err.name = 'NotFoundError';
@@ -19,13 +20,20 @@ export default class GameServiceImpl implements GameService {
     return GameLogic.validateGame(prev, game);
   }
 
-  calculateNextMove(game: Game): Game {
+  async calculateNextMove(game: Game): Promise<Game> {
     const result = GameLogic.calculateNextMove(game);
-    this.repo.save(result);
+    await this.repo.save(result);
     return result;
   }
 
   isGameOver(game: Game): number {
     return GameLogic.isGameOver(game);
+  }
+
+  async newGame(): Promise<Game> {
+    const game = new Game(randomUUID());
+    await this.repo.save(game);
+
+    return game;
   }
 }

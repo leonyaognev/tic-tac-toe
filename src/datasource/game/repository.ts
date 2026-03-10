@@ -8,12 +8,12 @@ import { Injectable } from '@nestjs/common';
 export default class Repository {
   constructor(private storage: InStorage) {}
 
-  save(game: Game) {
-    this.storage.saveGame(gameMapper.toDatasource(game));
+  async save(game: Game) {
+    await this.storage.saveGame(gameMapper.toDatasource(game));
   }
 
-  get(id: UUID): Game | undefined {
-    const data = this.storage.getGame(id);
+  async get(id: UUID): Promise<Game | undefined> {
+    const data = await this.storage.getGame(id);
     return data ? gameMapper.toDomain(data) : undefined;
   }
 }
