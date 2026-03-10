@@ -16,8 +16,8 @@ export default class Board {
     }
   }
 
-  checkWinner(): number {
-    const size: number = this.grid.length;
+  checkWinner(): number | null {
+    const size = this.grid.length;
     const lines: number[][] = [];
 
     for (let i = 0; i < size; i++) {
@@ -47,6 +47,8 @@ export default class Board {
       if (line.every((cell) => cell === CellType.crosses))
         return CellType.crosses;
     }
+
+    if (this.grid.some((row) => row.includes(CellType.empty))) return null;
 
     return CellType.empty;
   }

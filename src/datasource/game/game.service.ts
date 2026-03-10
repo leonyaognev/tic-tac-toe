@@ -26,7 +26,7 @@ export default class GameServiceImpl implements GameService {
     return result;
   }
 
-  isGameOver(game: Game): number {
+  isGameOver(game: Game): number | null {
     return GameLogic.isGameOver(game);
   }
 

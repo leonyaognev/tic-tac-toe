@@ -45,9 +45,9 @@ export default class GameController {
       if (gameOver !== CellType.empty)
         if (gameOver === CellType.crosses) {
           return PostMapper.toDTO(game, 'win');
-        } else if (this.gameService.isGameOver(game) === CellType.zeros) {
+        } else if (gameOver === CellType.zeros) {
           return PostMapper.toDTO(game, 'lose');
-        } else {
+        } else if (gameOver === CellType.empty) {
           return PostMapper.toDTO(game, 'draw');
         }
 
@@ -57,9 +57,9 @@ export default class GameController {
       if (gameOver !== CellType.empty)
         if (gameOver === CellType.crosses) {
           return PostMapper.toDTO(game, 'win');
-        } else if (this.gameService.isGameOver(game) === CellType.zeros) {
+        } else if (gameOver === CellType.zeros) {
           return PostMapper.toDTO(game, 'lose');
-        } else {
+        } else if (gameOver === CellType.empty) {
           return PostMapper.toDTO(game, 'draw');
         }
     } else {
